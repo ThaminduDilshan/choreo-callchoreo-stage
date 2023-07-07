@@ -1,6 +1,6 @@
 openapi: 3.0.1
 info:
-  title: /
+  title: Service Openapi Yaml
   version: 0.1.0
 servers:
 - url: "{server}:{port}/"
@@ -8,30 +8,42 @@ servers:
     server:
       default: http://localhost
     port:
-      default: "9090"
+      default: "8090"
 paths:
-  /greeting:
-    get:
-      summary: A resource for generating greetings
-      operationId: getGreeting
-      parameters:
-      - name: name
-        in: query
-        description: the input string name
-        required: true
-        schema:
-          type: string
+  /risk:
+    post:
+      operationId: postRisk
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RiskRequest'
       responses:
-        "200":
-          description: Ok
+        "201":
+          description: Created
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
+                $ref: '#/components/schemas/RiskResponse'
         "500":
           description: Internal server error
           content:
             text/plain:
               schema:
                 type: string
-components: {}
+components:
+  schemas:
+    RiskRequest:
+      required:
+      - ip
+      type: object
+      properties:
+        ip:
+          type: string
+    RiskResponse:
+      required:
+      - hasRisk
+      type: object
+      properties:
+        hasRisk:
+          type: boolean
